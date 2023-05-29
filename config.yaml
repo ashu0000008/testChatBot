@@ -31,7 +31,7 @@ wechat:
   # 影响滚动返回结果 (5s-13s) 
   timeout: 7
   # 用户关注时主动发送的消息
-  subscribeMsg: 你好，我是基于ChatGPT的AI助手，有什么能帮助您的吗？
+  subscribeMsg: 你好，我是ChatBot小助手，有什么能帮助您的吗？
 
 
 

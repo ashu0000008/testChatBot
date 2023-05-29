@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -38,12 +39,17 @@ func WechatCheck(w http.ResponseWriter, r *http.Request) {
 // https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Passive_user_reply_message.html
 // 微信服务器在五秒内收不到响应会断掉连接，并且重新发起请求，总共重试三次
 func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
+
+	fmt.Printf("收到消息\r\n")
+
 	bs, _ := io.ReadAll(r.Body)
 	msg := wechat.NewMsg(bs)
 
 	if msg == nil {
 		echo(w, []byte("xml格式公众号消息接口，请勿手动调用"))
 		return
+	} else {
+		fmt.Printf("From %s\r\n", msg.FromUserName)
 	}
 
 	// 非文本不回复(返回success表示不回复)
@@ -70,8 +76,9 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 	// https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Receiving_standard_messages.html
 	case "voice":
 		msg.Content = msg.Recognition
+		fmt.Printf("语音消息内容:%s\r\n", msg.Content)
 	case "text":
-		log.Println(msg.Content)
+		fmt.Printf("文本消息内容:%s\r\n", msg.Content)
 	}
 
 	// 敏感词检测
@@ -82,7 +89,7 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//测试固定回复
-	bs = msg.GenerateEchoData("ChatBot收到：" + msg.Content)
+	bs = msg.GenerateEchoData("ChatBot收到:" + msg.Content)
 	echo(w, bs)
 	requests.Delete(msg.MsgId)
 
@@ -107,6 +114,8 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 	//// 超时不要回答，会重试的
 	//case <-time.After(time.Second * 5):
 	//}
+
+	fmt.Printf("\r\n\n")
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
