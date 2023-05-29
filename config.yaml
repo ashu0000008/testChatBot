@@ -27,7 +27,7 @@ openai:
 
 wechat:
   # 必填(公众号服务). 与公众号设置保持一致
-  token: XXX
+  token: 6d25a684955811e9aa94efccd7a06522
   # 影响滚动返回结果 (5s-13s) 
   timeout: 7
   # 用户关注时主动发送的消息

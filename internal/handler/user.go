@@ -71,7 +71,7 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 	case "voice":
 		msg.Content = msg.Recognition
 	case "text":
-
+		log.Println(msg.Content)
 	}
 
 	// 敏感词检测
@@ -81,27 +81,32 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var ch chan string
-	v, ok := requests.Load(msg.MsgId)
-	if !ok {
-		ch = make(chan string)
-		requests.Store(msg.MsgId, ch)
-		ch <- openai.Query(msg.FromUserName, msg.Content, time.Second*time.Duration(config.Wechat.Timeout))
-	} else {
-		ch = v.(chan string)
-	}
+	//测试固定回复
+	bs = msg.GenerateEchoData("ChatBot收到：" + msg.Content)
+	echo(w, bs)
+	requests.Delete(msg.MsgId)
 
-	select {
-	case result := <-ch:
-		if !fiter.Check(result) {
-			result = warn
-		}
-		bs := msg.GenerateEchoData(result)
-		echo(w, bs)
-		requests.Delete(msg.MsgId)
-	// 超时不要回答，会重试的
-	case <-time.After(time.Second * 5):
-	}
+	//var ch chan string
+	//v, ok := requests.Load(msg.MsgId)
+	//if !ok {
+	//	ch = make(chan string)
+	//	requests.Store(msg.MsgId, ch)
+	//	ch <- openai.Query(msg.FromUserName, msg.Content, time.Second*time.Duration(config.Wechat.Timeout))
+	//} else {
+	//	ch = v.(chan string)
+	//}
+	//
+	//select {
+	//case result := <-ch:
+	//	if !fiter.Check(result) {
+	//		result = warn
+	//	}
+	//	bs := msg.GenerateEchoData(result)
+	//	echo(w, bs)
+	//	requests.Delete(msg.MsgId)
+	//// 超时不要回答，会重试的
+	//case <-time.After(time.Second * 5):
+	//}
 }
 
 func Test(w http.ResponseWriter, r *http.Request) {
