@@ -15,7 +15,7 @@ func GetAnswerFromUnit(question string, usrId string) string {
 	fmt.Println(orgData)
 
 	response := doRequest(question, usrId)
-	fmt.Println(response)
+	fmt.Println("UNIT received: " + response)
 
 	return response
 }
@@ -68,5 +68,6 @@ func doRequest(question string, usrId string) string {
 		return "no actions"
 	}
 
+	mSessionId = responseData.Result.SessionId
 	return responseData.Result.Responses[0].Actions[0].Say
 }

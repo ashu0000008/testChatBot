@@ -56,7 +56,8 @@ func request4Token() string {
 		fmt.Println(err)
 		return ""
 	}
-	fmt.Println(string(body))
+	fmt.Println("updating token")
+	//fmt.Println(string(body))
 
 	//parse json
 	var resp TokenResponse
