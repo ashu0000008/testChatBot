@@ -17,7 +17,7 @@ func GetAnswerFromUnit(question string, usrId string) string {
 	response := doRequest(question, usrId)
 	fmt.Println(response)
 
-	return orgData
+	return response
 }
 
 func doRequest(question string, usrId string) string {
