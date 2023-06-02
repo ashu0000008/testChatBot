@@ -33,16 +33,40 @@ func doRequest(question string, usrId string) string {
 	paramData := bytes.NewBuffer(jsonParamBytes)
 	resp, err := http.Post(url, "application/x-www-form-urlencoded", paramData)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return err.Error()
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return err.Error()
 	}
 
 	//todo 解析出sessionId
+	//parse json string
+	var responseData ConversationResponse
+	err = json.Unmarshal(body, &responseData)
+	if err != nil {
+		fmt.Println(err)
+		return err.Error()
+	}
 
-	return string(body)
+	if responseData.ErrorCode != 0 {
+		fmt.Println(responseData.ErrorCode)
+		return responseData.ErrorMsg
+	}
+
+	if len(responseData.Result.Responses) == 0 {
+		fmt.Println("no response")
+		return "no response"
+	}
+
+	if len(responseData.Result.Responses[0].Actions) == 0 {
+		fmt.Println("no actions")
+		return "no actions"
+	}
+
+	return responseData.Result.Responses[0].Actions[0].Say
 }

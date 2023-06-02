@@ -18,10 +18,12 @@ func init() {
 func test() {
 	token := mybots.GetUnitToken()
 	fmt.Println(token)
+	output := mybots.GetAnswerFromUnit("今天天气怎么样", "123")
+	fmt.Println(output)
 }
 
 func main() {
-	test()
+	//test()
 	r := bootstrap.New()
 
 	// 微信消息处理

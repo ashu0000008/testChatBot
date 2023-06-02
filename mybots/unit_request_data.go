@@ -17,5 +17,5 @@ type ConversationRequest struct {
 
 func newConversationRequest(request string, sessionId string, terminalId string) ConversationRequest {
 	requestData := RequestData{TerminalId: terminalId, Query: request}
-	return ConversationRequest{Version: "3", ServiceId: "S90926", LogId: terminalId, SessionId: sessionId, Request: requestData}
+	return ConversationRequest{Version: "3.0", ServiceId: "S90926", LogId: terminalId, SessionId: sessionId, Request: requestData}
 }
