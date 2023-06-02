@@ -10,6 +10,7 @@ import (
 	"openai/internal/service/fiter"
 	"openai/internal/service/openai"
 	"openai/internal/service/wechat"
+	"openai/mybots"
 	"sync"
 	"time"
 )
@@ -88,8 +89,8 @@ func ReceiveMsg(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//测试固定回复
-	bs = msg.GenerateEchoData("ChatBot收到:" + msg.Content)
+	unitAnswer := mybots.GetAnswerFromUnit(msg.Content, msg.FromUserName)
+	bs = msg.GenerateEchoData(unitAnswer)
 	echo(w, bs)
 	requests.Delete(msg.MsgId)
 

@@ -7,6 +7,7 @@ import (
 	"openai/bootstrap"
 	"openai/internal/config"
 	"openai/internal/handler"
+	"openai/mybots"
 	"os"
 )
 
@@ -14,7 +15,13 @@ func init() {
 
 }
 
+func test() {
+	token := mybots.GetUnitToken()
+	fmt.Println(token)
+}
+
 func main() {
+	test()
 	r := bootstrap.New()
 
 	// 微信消息处理
